@@ -17,6 +17,13 @@ sh -c "git remote add mirror $*"
 sh -c "echo pushing to $branch branch at $(git remote get-url --push mirror)"
 sh -c "git push mirror $branch"
 
+# RobertGlein
+echo "GITLAB_PASSWORD = ${GITLAB_PASSWORD}"
+if [ "${GITLAB_PASSWORD}" = "" ]
+  echo "GitLab auth failed because of external PR"
+  exit 1
+fi
+
 sleep $POLL_TIMEOUT
 
 pipeline_id=$(curl --header "PRIVATE-TOKEN: $GITLAB_PASSWORD" --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${branch}" | jq '.last_pipeline.id')
