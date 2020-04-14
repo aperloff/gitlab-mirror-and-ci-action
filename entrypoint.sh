@@ -20,7 +20,7 @@ sh -c "git push mirror $branch"
 # RobertGlein
 if [ "${GITLAB_PASSWORD}" = "" ]
   then
-  echo "GitLab auth failed because of external PR"
+  echo "Empty GitLab password. Probably because of external PR."
   exit 1
 fi
 
