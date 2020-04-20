@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Error handling
 set -euo pipefail
 
 DEFAULT_POLL_TIMEOUT=10
@@ -16,11 +17,6 @@ sh -c "git config --global credential.helper cache"
 sh -c "git remote add mirror $*"
 sh -c "echo pushing to $branch branch at $(git remote get-url --push mirror)"
 git push mirror $branch
-
-if [[ -z "${GITLAB_PASSWORD}" ]]; then
-  echo "Empty or non-existent GitLab password."
-  exit 1
-fi
 
 sleep $POLL_TIMEOUT
 
