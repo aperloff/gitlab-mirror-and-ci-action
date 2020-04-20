@@ -1,6 +1,10 @@
 #!/bin/sh
 
-set -u
+# Error handling
+set -euo pipefail
+# set -e : Instructs bash to immediately exit if any command has a non-zero exit status.
+# set -u : Reference to any variable not previously defined - with the exceptions of $* and $@ - is an error
+# set -o pipefail : Prevents errors in a pipeline from being masked.
 
 DEFAULT_POLL_TIMEOUT=10
 POLL_TIMEOUT=${POLL_TIMEOUT:-$DEFAULT_POLL_TIMEOUT}
@@ -16,11 +20,6 @@ sh -c "git config --global credential.helper cache"
 sh -c "git remote add mirror $*"
 sh -c "echo pushing to $branch branch at $(git remote get-url --push mirror)"
 sh -c "git push mirror $branch"
-
-if [[ -z "${GITLAB_PASSWORD}" ]]; then
-  echo "Empty or non-existent GitLab password."
-  exit 1
-fi
 
 sleep $POLL_TIMEOUT
 
