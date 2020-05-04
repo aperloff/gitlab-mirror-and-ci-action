@@ -19,10 +19,10 @@ sh -c "git config --global core.askPass /cred-helper.sh"
 sh -c "git config --global credential.helper cache"
 sh -c "git remote add mirror $*"
 if [[ -n "${REMOVE_BRANCH}" ]] && [[ "${REMOVE_BRANCH}" == "true" ]]; then # Check if variable exists and is true
-   # If branch exists; w/o sh -c ""
+   # If branch exists
    branchExists=$(git ls-remote $(git remote get-url --push mirror) ${CHECKOUT_BRANCH:-$DEFAULT_GITHUB_REF} | wc -l)
    if [[ "${branchExists}" == "1" ]]; then
-      echo "removing the branch ${branch} at $(git remote get-url --push mirror)"
+      echo "removing the ${branch} branch at $(git remote get-url --push mirror)"
       git push mirror --delete ${branch}
    fi
 fi		
