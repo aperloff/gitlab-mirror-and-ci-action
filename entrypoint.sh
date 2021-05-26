@@ -12,6 +12,12 @@ POLL_TIMEOUT=${POLL_TIMEOUT:-$DEFAULT_POLL_TIMEOUT}
 DEFAULT_GITHUB_REF=${GITHUB_REF:11}
 git checkout "${CHECKOUT_BRANCH:-$DEFAULT_GITHUB_REF}"
 
+sh -c "git config --global user.name $GITLAB_USERNAME"
+sh -c "git config --global user.email ${GITLAB_USERNAME}@${GITLAB_HOSTNAME}"
+if [[ -n "${REBASE_MASTER}" ]] && [[ "${REBASE_MASTER}" == "true" ]]; then # Check if variable exists and is true
+    git rebase origin/master
+fi
+
 branch=$(git symbolic-ref --short HEAD)
 
 sh -c "git config --global credential.username $GITLAB_USERNAME"
@@ -35,6 +41,7 @@ pipeline_id=$(curl --header "PRIVATE-TOKEN: $GITLAB_PASSWORD" --silent "https://
 
 echo "Triggered CI for branch ${branch}"
 echo "Working with pipeline id #${pipeline_id}"
+echo "Pipeline URL: $*/-/pipelines/${pipeline_id}"
 echo "Poll timeout set to ${POLL_TIMEOUT}"
 
 ci_status="pending"
