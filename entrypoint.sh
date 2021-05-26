@@ -38,10 +38,10 @@ sh -c "git push mirror $branch"
 sleep $POLL_TIMEOUT
 
 pipeline_id=$(curl --header "PRIVATE-TOKEN: $GITLAB_PASSWORD" --silent "https://${GITLAB_HOSTNAME}/api/v4/projects/${GITLAB_PROJECT_ID}/repository/commits/${branch}" | jq '.last_pipeline.id')
-echo "******* Pipeline URL: $*/-/pipelines/${pipeline_id} *******"
 
 echo "Triggered CI for branch ${branch}"
 echo "Working with pipeline id #${pipeline_id}"
+echo "Pipeline URL: $*/-/pipelines/${pipeline_id}"
 echo "Poll timeout set to ${POLL_TIMEOUT}"
 
 ci_status="pending"
